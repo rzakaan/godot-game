@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://bdohyepy7m461"]
+
+[ext_resource type="PackedScene" uid="uid://dtap32qdr80j4" path="res://scene/Player.tscn" id="1_2ep5n"]
+
+[sub_resource type="Environment" id="Environment_8p2qa"]
+sdfgi_enabled = true
+fog_light_color = Color(0.27451, 0.556863, 0.886275, 1)
+fog_light_energy = 0.5
+fog_density = 0.1
+fog_height = 10.0
+fog_height_density = 0.05
+volumetric_fog_albedo = Color(0.870588, 0, 0.878431, 1)
+volumetric_fog_gi_inject = 1.27
+
+[node name="World" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0470943, 10, 0.00370407)
+light_energy = 2.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_8p2qa")
+
+[node name="Map" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.116384, 0)
+
+[node name="Floor" type="CSGBox3D" parent="Map"]
+transform = Transform3D(57.2445, 0, 0, 0, 0.0463269, 0, 0, 0, 53.6137, 0, 0, 0)
+
+[node name="Player" parent="." instance=ExtResource("1_2ep5n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.117651, 0)

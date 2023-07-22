@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://ds3lk21ghcbpv"]
+
+[ext_resource type="Script" path="res://script/GameControl.gd" id="1_cxn01"]
+
+[node name="GameControl" type="ColorRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+script = ExtResource("1_cxn01")

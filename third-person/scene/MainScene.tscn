@@ -29,3 +29,5 @@ transform = Transform3D(57.2445, 0, 0, 0, 0.0463269, 0, 0, 0, 53.6137, 0, 0, 0)
 
 [node name="Player" parent="." instance=ExtResource("1_2ep5n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.117651, 0)
+sense_horizontal = 0.2
+sense_vertical = 0.2

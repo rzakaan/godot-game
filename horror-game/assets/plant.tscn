@@ -1,0 +1,120 @@
+[gd_scene load_steps=9 format=3 uid="uid://dv6o0glbkyjmg"]
+
+[ext_resource type="PackedScene" uid="uid://h7evehvvmkpv" path="res://texture/plant.glb" id="1_oblug"]
+[ext_resource type="Texture2D" uid="uid://dyf8a2h586i4t" path="res://texture/plant_plant.png" id="2_7niel"]
+
+[sub_resource type="Shader" id="Shader_lfmkw"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.1.1.stable's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_mix,depth_draw_opaque,cull_disabled,diffuse_burley,specular_schlick_ggx, world_vertex_coords;
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color,filter_nearest_mipmap,repeat_enable;
+uniform float alpha_scissor_threshold;
+uniform float point_size : hint_range(0,128);
+uniform float roughness : hint_range(0,1);
+uniform sampler2D texture_metallic : hint_default_white,filter_nearest_mipmap,repeat_enable;
+uniform vec4 metallic_texture_channel;
+uniform sampler2D texture_roughness : hint_roughness_r,filter_nearest_mipmap,repeat_enable;
+uniform float specular;
+uniform float metallic;
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+uniform vec3 uv2_scale;
+uniform vec3 uv2_offset;
+
+group_uniforms wind;
+uniform sampler2D noise_tex;
+uniform float wind_speed = .1;
+uniform float wind_strength = .01;
+
+void vertex() {
+	UV=UV*uv1_scale.xy+uv1_offset.xy;
+	
+	float offset = TIME * wind_speed;
+	float noise = texture(noise_tex, NODE_POSITION_WORLD.xz - offset).r;
+	noise -= .5;
+	noise *= wind_strength;
+	VERTEX.xy += noise * length(VERTEX.y - NODE_POSITION_WORLD.y);
+}
+
+void fragment() {
+	vec2 base_uv = UV;
+	vec4 albedo_tex = texture(texture_albedo,base_uv);
+	albedo_tex *= COLOR;
+	ALBEDO = albedo.rgb * albedo_tex.rgb;
+	float metallic_tex = dot(texture(texture_metallic,base_uv),metallic_texture_channel);
+	METALLIC = metallic_tex * metallic;
+	vec4 roughness_texture_channel = vec4(1.0,0.0,0.0,0.0);
+	float roughness_tex = dot(texture(texture_roughness,base_uv),roughness_texture_channel);
+	ROUGHNESS = roughness_tex * roughness;
+	SPECULAR = specular;
+	ALPHA *= albedo.a * albedo_tex.a;
+	ALPHA_SCISSOR_THRESHOLD = alpha_scissor_threshold;
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_gvykq"]
+frequency = 0.005
+fractal_octaves = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_08eh0"]
+seamless = true
+seamless_blend_skirt = 1.0
+noise = SubResource("FastNoiseLite_gvykq")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_omnfb"]
+resource_name = "Plant"
+render_priority = 0
+shader = SubResource("Shader_lfmkw")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/alpha_scissor_threshold = 0.5
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/texture_albedo = ExtResource("2_7niel")
+shader_parameter/wind_speed = 0.1
+shader_parameter/wind_strength = 0.2
+shader_parameter/noise_tex = SubResource("NoiseTexture2D_08eh0")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_2px6x"]
+_surfaces = [{
+"aabb": AABB(-1, -0.866025, -1, 2, 1.73205, 2.00001),
+"format": 4097,
+"index_count": 18,
+"index_data": PackedByteArray(0, 0, 3, 0, 1, 0, 0, 0, 2, 0, 3, 0, 4, 0, 7, 0, 5, 0, 4, 0, 6, 0, 7, 0, 8, 0, 11, 0, 9, 0, 8, 0, 10, 0, 11, 0),
+"name": "Plant",
+"primitive": 3,
+"vertex_count": 12,
+"vertex_data": PackedByteArray(0, 0, 128, 191, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 191, 0, 0, 0, 0, 0, 0, 128, 191, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 191, 2, 0, 0, 63, 214, 179, 93, 191, 0, 0, 128, 63, 0, 0, 0, 191, 216, 179, 93, 63, 255, 255, 127, 63, 0, 0, 0, 63, 216, 179, 93, 191, 255, 255, 127, 191, 2, 0, 0, 191, 214, 179, 93, 63, 0, 0, 128, 191, 62, 62, 59, 63, 229, 146, 46, 63, 255, 255, 127, 63, 64, 62, 59, 191, 227, 146, 46, 191, 0, 0, 128, 63, 64, 62, 59, 63, 227, 146, 46, 63, 0, 0, 128, 191, 62, 62, 59, 191, 229, 146, 46, 191, 255, 255, 127, 191)
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_057m3"]
+resource_name = "plant_Plane_001"
+_surfaces = [{
+"aabb": AABB(-1, -0.866025, -1, 2, 1.73205, 2.00001),
+"attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0),
+"format": 4119,
+"index_count": 18,
+"index_data": PackedByteArray(0, 0, 3, 0, 1, 0, 0, 0, 2, 0, 3, 0, 4, 0, 7, 0, 5, 0, 4, 0, 6, 0, 7, 0, 8, 0, 11, 0, 9, 0, 8, 0, 10, 0, 11, 0),
+"material": SubResource("ShaderMaterial_omnfb"),
+"name": "Plant",
+"primitive": 3,
+"vertex_count": 12,
+"vertex_data": PackedByteArray(0, 0, 128, 191, 0, 0, 0, 0, 0, 0, 128, 63, 255, 127, 255, 255, 255, 255, 255, 191, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 63, 255, 127, 255, 255, 255, 255, 255, 191, 0, 0, 128, 191, 0, 0, 0, 0, 0, 0, 128, 191, 255, 127, 255, 255, 255, 255, 255, 191, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 191, 255, 127, 255, 255, 255, 255, 255, 191, 2, 0, 0, 63, 214, 179, 93, 191, 0, 0, 128, 63, 217, 46, 37, 81, 37, 81, 146, 232, 0, 0, 0, 191, 216, 179, 93, 63, 255, 255, 127, 63, 217, 46, 37, 81, 37, 81, 146, 232, 0, 0, 0, 63, 216, 179, 93, 191, 255, 255, 127, 191, 217, 46, 37, 81, 37, 81, 146, 232, 2, 0, 0, 191, 214, 179, 93, 63, 0, 0, 128, 191, 217, 46, 37, 81, 37, 81, 146, 232, 62, 62, 59, 63, 229, 146, 46, 63, 255, 255, 127, 63, 193, 189, 193, 61, 193, 61, 30, 161, 64, 62, 59, 191, 227, 146, 46, 191, 0, 0, 128, 63, 193, 189, 193, 61, 193, 61, 30, 161, 64, 62, 59, 63, 227, 146, 46, 63, 0, 0, 128, 191, 193, 189, 193, 61, 193, 61, 30, 161, 62, 62, 59, 191, 229, 146, 46, 191, 255, 255, 127, 191, 193, 189, 193, 61, 193, 61, 30, 161)
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_2px6x")
+
+[node name="plant" instance=ExtResource("1_oblug")]
+
+[node name="Plant" parent="." index="0"]
+transform = Transform3D(-0.25, 0.433013, -2.98023e-08, -2.98023e-08, -5.96046e-08, -0.5, -0.433013, -0.25, 0, 0, 0.388831, 0)
+mesh = SubResource("ArrayMesh_057m3")

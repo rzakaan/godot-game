@@ -1,0 +1,75 @@
+[gd_scene load_steps=13 format=3 uid="uid://c4g5bmxwcd7fs"]
+
+[ext_resource type="Texture2D" uid="uid://dmbj5xv66hga5" path="res://texture/forest-ground-texture-64px.jpg" id="1_2bllg"]
+[ext_resource type="Texture2D" uid="uid://bwu74032jmucr" path="res://texture/sky-stars-texture.jpg" id="1_q1kfw"]
+[ext_resource type="MeshLibrary" uid="uid://bgmer0n7xa2bk" path="res://assets/tree_mesh.tres" id="2_adkpp"]
+[ext_resource type="MeshLibrary" uid="uid://d0k16rmikcrpk" path="res://assets/plant_mesh.tres" id="3_4ooou"]
+[ext_resource type="PackedScene" uid="uid://b75aby8cg0h7v" path="res://assets/campfire.tscn" id="4_pud26"]
+[ext_resource type="PackedScene" uid="uid://c16kpybujkiaf" path="res://scene/Player.tscn" id="5_0wtp8"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_m7sim"]
+panorama = ExtResource("1_q1kfw")
+
+[sub_resource type="Sky" id="Sky_rq3pq"]
+sky_material = SubResource("PanoramaSkyMaterial_m7sim")
+
+[sub_resource type="Environment" id="Environment_3cqsq"]
+background_mode = 2
+sky = SubResource("Sky_rq3pq")
+tonemap_mode = 2
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.129412, 0.145098, 0.168627, 1)
+fog_density = 0.05
+fog_sky_affect = 0.7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_alqff"]
+albedo_texture = ExtResource("1_2bllg")
+metallic_specular = 0.0
+normal_enabled = true
+uv1_scale = Vector3(50, 50, 50)
+texture_filter = 0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gb8s4"]
+material = SubResource("StandardMaterial3D_alqff")
+size = Vector2(100, 100)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_gfdiq"]
+data = PackedVector3Array(50, 0, 50, -50, 0, 50, 50, 0, -50, -50, 0, 50, -50, 0, -50, 50, 0, -50)
+
+[node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_3cqsq")
+
+[node name="Player" parent="." instance=ExtResource("5_0wtp8")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2, 0, 0)
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.97928, 0, 0, 0, 0.987783, 0, 0, 0, 1.81956, 0, 0, 0)
+mesh = SubResource("PlaneMesh_gb8s4")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ground"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_gfdiq")
+
+[node name="TreeGridMap" type="GridMap" parent="."]
+mesh_library = ExtResource("2_adkpp")
+cell_size = Vector3(1, 2, 1)
+cell_center_y = false
+data = {
+"cells": PackedInt32Array(0, 65528, 0, 0, 8, 0, 8, 0, 0, 65528, 0, 0, 65526, 9, 0, 9, 9, 0, 9, 65527, 0, 65527, 65527, 0, 65517, 65526, 0, 65516, 65526, 0, 65516, 65527, 0, 65515, 65528, 0, 65515, 65529, 0, 65514, 65529, 0, 65514, 65530, 0, 65514, 65531, 0, 65513, 65531, 0, 65513, 65532, 0, 65513, 65533, 0, 65512, 65534, 0, 65512, 65535, 0, 65512, 0, 0, 65512, 1, 0, 65512, 2, 0, 65512, 3, 0, 65512, 4, 0, 65512, 5, 0, 65512, 6, 0, 65512, 7, 0, 65512, 8, 0, 65513, 8, 0, 65513, 9, 0, 65514, 10, 0, 65514, 11, 0, 65515, 11, 0, 65515, 12, 0, 65516, 13, 0, 65517, 14, 0, 65518, 14, 0, 65519, 15, 0, 65520, 15, 0, 65520, 16, 0, 65521, 16, 0, 65523, 16, 0, 65524, 17, 0, 65525, 18, 0, 65526, 18, 0, 65527, 18, 0, 65528, 18, 0, 65529, 19, 0, 65531, 19, 0, 65532, 19, 0, 65533, 20, 0, 65534, 20, 0, 65535, 20, 0, 0, 20, 0, 1, 20, 0, 3, 21, 0, 4, 21, 0, 5, 21, 0, 6, 21, 0, 8, 21, 0, 9, 21, 0, 11, 21, 0, 13, 21, 0, 14, 21, 0, 16, 20, 0, 17, 20, 0, 18, 19, 0, 19, 18, 0, 19, 16, 0, 20, 15, 0, 21, 13, 0, 22, 11, 0, 22, 9, 0, 22, 8, 0, 22, 7, 0, 22, 5, 0, 22, 4, 0, 22, 2, 0, 22, 0, 0, 22, 65534, 0, 22, 65532, 0, 22, 65530, 0, 22, 65529, 0, 21, 65527, 0, 20, 65526, 0, 19, 65524, 0, 18, 65524, 0, 17, 65523, 0, 16, 65522, 0, 15, 65521, 0, 13, 65520, 0, 12, 65520, 0, 10, 65519, 0, 9, 65518, 0, 8, 65518, 0, 7, 65518, 0, 6, 65518, 0, 5, 65518, 0, 3, 65518, 0, 1, 65518, 0, 0, 65518, 0, 65534, 65518, 0, 65533, 65518, 0, 65531, 65518, 0, 65530, 65518, 0, 65528, 65519, 0, 65527, 65519, 0, 65526, 65519, 0, 65526, 65520, 0, 65525, 65520, 0, 65523, 65520, 0, 65522, 65521, 0, 65521, 65522, 0, 65520, 65522, 0, 65519, 65523, 0, 65518, 65523, 0, 65518, 65524, 0, 65517, 65524, 0)
+}
+
+[node name="PlantGridMap" type="GridMap" parent="."]
+mesh_library = ExtResource("3_4ooou")
+cell_size = Vector3(0.5, 2, 0.5)
+cell_center_y = false
+data = {
+"cells": PackedInt32Array(1, 0, 0)
+}
+
+[node name="Campfire" parent="." instance=ExtResource("4_pud26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.36365, 0, 0)

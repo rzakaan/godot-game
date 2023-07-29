@@ -1,0 +1,31 @@
+Blender Steps
+- Add new object (Shift + A) **Mesh Plane**
+- Goto Shading
+- Add New Material
+- Change Base Color value to **Texture Image** and add image
+- Blend Mode : Alpha Clip
+- Specular Tint : 0
+- Roughness : 1
+- Scale 0.5
+- Rotate X 90
+- Duplicate (Shift+D)
+- Rotate Z 120
+- Join (Ctrl+J) object
+- Right Click > Set Origin > Origin to 3D Cursor
+- 
+- Go to **Uv Editing**
+- Select to all faces (A) and make **Smart Uv Project** press U
+- 
+- Go to layout, select seperated bottom face Move(G) Z axis 4
+- Edit Mode(Tab), Face Mode(3), select seperated face and delete (X > **Only Faces**
+- Extrude E, Right Click, Scale(S) 6, Move(G) -3
+- Select Edges top, Shift + S > **Cursor To Selected**
+-
+- Go to **Shading**
+- 
+-
+- Shift + A > Empty > Empty Axis
+- Move(G) Z 0.5
+- Edit Mode, Select top of the tree, Shift + S > Cursor to Selected
+- Select pine leaf needles and, add modifier array 
+ 
